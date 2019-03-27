@@ -1,7 +1,7 @@
 // Code for Simon Says Arduino Wiring and Code Tutorial 
 // Video found at: https://www.youtube.com/watch?v=TJiz7PT21B4
 
-// Define all the LED and Button pins.
+// Define all the LED and Button pins
 // {RED, GREEN, YELLOW, BLUE}
 int buttons[] = {3, 5, 7, 9}; //The four button input pins
 int leds[] = {2, 4, 6, 8};  // LED pins
