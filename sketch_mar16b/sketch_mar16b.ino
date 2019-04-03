@@ -27,6 +27,8 @@ long previousMillis = 0;
 // the setup routine runs once when you press reset:
 void setup() { 
 
+  Serial.begin(9600);  
+
   for(int pin=0; pin<4; pin++)
   {
     pinMode(leds[pin], OUTPUT);
@@ -37,10 +39,12 @@ void setup() {
     pinMode(buttons[pin], INPUT);
   }
   
-  Serial.begin(9600);
+
 
   gameState = START; // Start the game with the start.
   randomSeed(analogRead(40)); // initializes the pseudo-random number generator,
+
+  
   
 }
 
@@ -53,13 +57,13 @@ void loop() {
   }
   else if(gameState == PLAY)
   {
-    Serial.println("Start"); 
+
     showSequence();
     readSequence();
   }
   else if(gameState == GAMEOVER)
   {
-    Serial.println("Gameover");
+
     blinkAll(5);
     gameState = START;
   }
@@ -72,8 +76,6 @@ void showSequence()
   //blinkRed(2);
   
   sequence[largestIndex] = random(0,4);
-  Serial.println("Next out"); 
-  Serial.println(sequence[largestIndex]); 
   largestIndex++;
   
   for(int index=0; index<largestIndex; index++)
@@ -93,25 +95,33 @@ void readSequence()
   //blinkYellow(2);
   int positionPressed;
   boolean madeMistake = false;
-  
+  int score = 0;
+
+
 
   
   for(int index=0; index<largestIndex & madeMistake == false; index++)
   {
-    Serial.println(""); 
-    Serial.println("Should push"); 
-    Serial.println(sequence[index]);
+    
     
     positionPressed = waitForButton(1000); // 0, 1, 2, or 3
 
-    Serial.println("Pressed"); 
-    Serial.println(positionPressed); 
+
     if(positionPressed == -1 | positionPressed != sequence[index])
     {
         madeMistake = true; // Exit the loop.
-    gameState = GAMEOVER;
+       gameState = GAMEOVER;
+       Serial.println("Het is klaar"); 
+
+    } if(madeMistake == false) {
+      Serial.println("Dit is goed"); 
+      score++;
+
     }
   }
+
+  Serial.println(score);
+  
   //blinkBlue(2);
 }
 
