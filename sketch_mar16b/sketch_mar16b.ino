@@ -111,10 +111,10 @@ void readSequence()
     {
         madeMistake = true; // Exit the loop.
        gameState = GAMEOVER;
-       Serial.println("Het is klaar"); 
+       Serial.println("Gameover!"); 
 
     } if(madeMistake == false) {
-      Serial.println("Dit is goed"); 
+      Serial.println("Je hebt 1 punt gescoord"); 
       score++;
 
     }
