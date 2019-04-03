@@ -24,6 +24,11 @@ boolean running = true;  // Flag to know is knightrider is running
 long currentMillis = 0;
 long previousMillis = 0;
 
+
+// Score
+
+int score = 0;
+
 // the setup routine runs once when you press reset:
 void setup() { 
 
@@ -95,9 +100,6 @@ void readSequence()
   //blinkYellow(2);
   int positionPressed;
   boolean madeMistake = false;
-  int score = 0;
-
-
 
   
   for(int index=0; index<largestIndex & madeMistake == false; index++)
