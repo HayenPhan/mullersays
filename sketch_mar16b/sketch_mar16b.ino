@@ -2,14 +2,18 @@
 // Video found at: https://www.youtube.com/watch?v=TJiz7PT21B4
 
 // includes for http request to add score to the database
+// Tim's Includes LCD
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
+// Einde Includes Tim
 #include <Arduino.h>
-#include <ESP8266WiFi.h>
-#include <ESP8266WiFiMulti.h>
-#include <ESP8266HTTPClient.h>
+//#include <ESP8266WiFi.h>
+//#include <ESP8266WiFiMulti.h>
+//#include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
-ESP8266WiFiMulti WiFiMulti;
+//ESP8266WiFiMulti WiFiMulti;
 // end includes
-
+LiquidCrystal_I2C lcd(0x3F, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE); // LCD Def
 // Define all the LED and Button pins
 // {RED, GREEN, YELLOW, BLUE}
 int buttons[] = {3, 5, 7, 9}; //The four button input pins
@@ -41,13 +45,13 @@ void setup() {
   Serial.println();
 
   for (uint8_t t = 4; t > 0; t--) {
-    Serial.printf("[SETUP] WAIT %d...\n", t);
+//    Serial.printf("[SETUP] WAIT %d...\n", t);
     Serial.flush();
     delay(1000);
   }
 
   Serial.print("Try to start connection with stads-lab");
-  WiFi.mode(WIFI_STA);
+//  WiFi.mode(WIFI_STA);
   WiFiMulti.addAP("Stads-Lab", "initialkey4iot");
   //end making conection to wifi
 
@@ -66,7 +70,11 @@ void setup() {
   gameState = START; // Start the game with the start.
   randomSeed(analogRead(40)); // initializes the pseudo-random number generator,
 
-
+  // Tim's LCD Code
+  //WE define our LCD 16 columns and 2 rows
+  lcd.begin(16,2);
+  lcd.backlight();//Power on the back light
+  //lcd.backlight(); Power off the back light
 
 }
 
@@ -324,7 +332,7 @@ void blinkBlue(int times)
 
 //function for http request to add score to database.
 int addScoreToDatabase(int scoretoadd, int name) {
-  if ((WiFiMulti.run() == WL_CONNECTED)) {
+//  if ((WiFiMulti.run() == WL_CONNECTED)) {
 
     WiFiClient client;
     HTTPClient http;
@@ -339,7 +347,7 @@ int addScoreToDatabase(int scoretoadd, int name) {
       // httpCode will be negative on error
       if (httpCode > 0) {
         // HTTP header has been send and Server response header has been handled
-        Serial.printf("[HTTP] GET... code: %d\n", httpCode);
+//        Serial.printf("[HTTP] GET... code: %d\n", httpCode);
 
         // file found at server
         if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
@@ -347,14 +355,19 @@ int addScoreToDatabase(int scoretoadd, int name) {
           Serial.println(payload);
         }
       } else {
-        Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+//        Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
       }
 
       http.end();
     } else {
-      Serial.printf("[HTTP} Unable to connect\n");
+//      Serial.printf("[HTTP} Unable to connect\n");
     }
   }
-
+  //Printen van text op LCD Tim
+  lcd.setCursor(0,0); //we start writing from the first row first column
+  lcd.print( String("uw score: ")+ String(score)); //16 characters poer line
+  delay(1000);//Delay used to give a dinamic effect
+  lcd.setCursor(0,1);
+  lcd.print("Mullersays");
 }
 //end function
