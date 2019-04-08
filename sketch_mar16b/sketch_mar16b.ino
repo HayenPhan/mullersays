@@ -1,15 +1,6 @@
 // Code for Simon Says Arduino Wiring and Code Tutorial 
 // Video found at: https://www.youtube.com/watch?v=TJiz7PT21B4
 
-// includes voor http verzoek voor het uplouden van de code
-#include <Arduino.h>
-#include <ESP8266WiFi.h>
-#include <ESP8266WiFiMulti.h>
-#include <ESP8266HTTPClient.h>
-#include <WiFiClient.h>
-ESP8266WiFiMulti WiFiMulti;
-// einde includes http verzoek includes
-
 // Define all the LED and Button pins
 // {RED, GREEN, YELLOW, BLUE}
 int buttons[] = {3, 5, 7, 9}; //The four button input pins
@@ -33,32 +24,15 @@ boolean running = true;  // Flag to know is knightrider is running
 long currentMillis = 0;
 long previousMillis = 0;
 
+
 // Score
 
 int score = 0;
 
-
-
-
-
 // the setup routine runs once when you press reset:
 void setup() { 
 
-  Serial.begin(9600);
-
-  //making conection to wifi
-  Serial.println();
-  
-  for (uint8_t t = 4; t > 0; t--) {
-    Serial.printf("[SETUP] WAIT %d...\n", t);
-    Serial.flush();
-    delay(1000);
-  }
-
-  Serial.print("Try to start connection with stads-lab");
-  WiFi.mode(WIFI_STA);
-  WiFiMulti.addAP("Stads-Lab", "initialkey4iot");
-  //end making conection to wifi
+  Serial.begin(9600);  
 
   for(int pin=0; pin<4; pin++)
   {
@@ -330,42 +304,3 @@ void blinkBlue(int times)
     delay(300);
   } 
 }
-
-//https verzoek naar website voor het toevoegen van de score.
-int addScoreToDatabase(int scoretoadd, int name){
-  if ((WiFiMulti.run() == WL_CONNECTED)) {
-
-    WiFiClient client;
-
-    HTTPClient http;
-
-    Serial.print("[HTTP] begin...\n");
-    if (http.begin(client, "http://score.velfox.eu/score/score.php?score=23&password=oke&name=tim")) {  // HTTP
-
-
-      Serial.print("[HTTP] GET...\n");
-      // start connection and send HTTP header
-      int httpCode = http.GET();
-
-      // httpCode will be negative on error
-      if (httpCode > 0) {
-        // HTTP header has been send and Server response header has been handled
-        Serial.printf("[HTTP] GET... code: %d\n", httpCode);
-
-        // file found at server
-        if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
-          String payload = http.getString();
-          Serial.println(payload);
-        }
-      } else {
-        Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
-      }
-
-      http.end();
-    } else {
-      Serial.printf("[HTTP} Unable to connect\n");
-    }
-  }
-
-  delay(10000);
-  }
