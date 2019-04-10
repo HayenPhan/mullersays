@@ -18,6 +18,17 @@ LiquidCrystal_I2C lcd(0x3F, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE); // LCD Def
 // {RED, GREEN, YELLOW, BLUE}
 int buttons[] = {3, 5, 7, 9}; //The four button input pins
 int leds[] = {2, 4, 6, 8};  // LED pins
+//button pins Score invoeren Tim
+const int button1 = 1;
+const int button2 = 3;
+//button variabelen
+int score = 22;
+char letter1 = 65;
+char letter2 = 65;
+char letter3 = 65;
+int letter = 1;
+
+
 
 // set game variables
 int sequence[100];
@@ -369,5 +380,33 @@ int addScoreToDatabase(int scoretoadd, int name) {
   delay(1000);//Delay used to give a dinamic effect
   lcd.setCursor(0,1);
   lcd.print("Mullersays");
+  //naam invoeren
+  int buttonState1 = digitalRead(button1);
+  int buttonState2 = digitalRead(button2);
+  lcd.setCursor(0,1);
+  lcd.print(String(letter1));
+  if (buttonState1 ==  HIGH && letter == 1){
+  delay(500);
+  letter1++;
+}
+
+if (buttonState1 == HIGH && letter == 2){
+  lcd.setCursor(1,1);
+  lcd.print(String(letter2));
+  delay(500);
+  letter2++;
+  }
+  
+if (buttonState1 == HIGH && letter == 3){
+  lcd.setCursor(2,1);
+  lcd.print(String(letter3));
+  delay(500);
+  letter3++;
+  }
+  
+if (buttonState2 == HIGH){
+  delay(500);
+  letter++;
+  }
 }
 //end function
