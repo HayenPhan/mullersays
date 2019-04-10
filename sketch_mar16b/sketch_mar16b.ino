@@ -22,7 +22,6 @@ int leds[] = {2, 4, 6, 8};  // LED pins
 const int button1 = 1;
 const int button2 = 3;
 //button variabelen
-int score = 22;
 char letter1 = 65;
 char letter2 = 65;
 char letter3 = 65;
@@ -51,6 +50,14 @@ int score = 0;
 void setup() {
 
   Serial.begin(9600);
+  
+    // Tim's LCD Code
+  //WE define our LCD 16 columns and 2 rows
+  lcd.begin(16,2);
+  lcd.backlight();//Power on the back light
+  //lcd.backlight(); Power off the back light
+    lcd.setCursor(0,0); //we start writing from the first row first column
+  lcd.print( "test"); //16 characters poer line
 
   //making conection to wifi
   Serial.println();
@@ -81,11 +88,8 @@ void setup() {
   gameState = START; // Start the game with the start.
   randomSeed(analogRead(40)); // initializes the pseudo-random number generator,
 
-  // Tim's LCD Code
-  //WE define our LCD 16 columns and 2 rows
-  lcd.begin(16,2);
-  lcd.backlight();//Power on the back light
-  //lcd.backlight(); Power off the back light
+
+
 
 }
 
@@ -343,14 +347,14 @@ void blinkBlue(int times)
 }
 
 //function for http request to add score to database.
-int addScoreToDatabase(int scoretoadd, int name) {
+int addScoreToDatabase(int scoretoadd, String name) {
   if ((WiFiMulti.run() == WL_CONNECTED)) {
 
     WiFiClient client;
     HTTPClient http;
 
     Serial.print("[HTTP] begin...\n");
-    if (http.begin(client, "http://score.velfox.eu/score/score.php?score=23&password=oke&name=tim")) {  // HTTP
+    if (http.begin(client, "http://score.velfox.eu/score/score.php?score=" + String(scoretoadd) + "&password=oke&name=" + name)) {  // HTTP
 
       Serial.print("[HTTP] GET...\n");
       // start connection and send HTTP header
@@ -375,7 +379,7 @@ int addScoreToDatabase(int scoretoadd, int name) {
       Serial.printf("[HTTP} Unable to connect\n");
     }
   }
-
+}
 
 int printenScore(){
 
@@ -424,5 +428,5 @@ if (letter == 3){
   }
   
 }
-}
+
 //end function
