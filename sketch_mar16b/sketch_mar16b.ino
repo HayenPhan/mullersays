@@ -104,8 +104,9 @@ void loop() {
   }
   else if (gameState == GAMEOVER)
   {
-
+    printenScore();
     blinkAll(5);
+    naamInvoeren();
     gameState = START;
   }
 
@@ -374,12 +375,20 @@ int addScoreToDatabase(int scoretoadd, int name) {
       Serial.printf("[HTTP} Unable to connect\n");
     }
   }
+
+
+int printenScore(){
+
   //Printen van text op LCD Tim
   lcd.setCursor(0,0); //we start writing from the first row first column
   lcd.print( String("uw score: ")+ String(score)); //16 characters poer line
   delay(1000);//Delay used to give a dinamic effect
   lcd.setCursor(0,1);
   lcd.print("Mullersays");
+
+}
+
+int naamInvoeren(){  
   //naam invoeren
   int buttonState1 = digitalRead(button1);
   int buttonState2 = digitalRead(button2);
@@ -389,6 +398,7 @@ int addScoreToDatabase(int scoretoadd, int name) {
   delay(500);
   letter1++;
 }
+
 
 if (buttonState1 == HIGH && letter == 2){
   lcd.setCursor(1,1);
@@ -408,5 +418,11 @@ if (buttonState2 == HIGH){
   delay(500);
   letter++;
   }
+if (letter == 3){
+  String name = String(letter1) + String(letter2) + String(letter3);
+  addScoreToDatabase(score, name);
+  }
+  
+}
 }
 //end function
